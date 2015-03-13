@@ -7,7 +7,7 @@ package gozdef
 
 // An HostAssetHint describes information about a host that can be used
 // to correlate asset information in MozDef. This is primarily used by MIG
-type AssetHint struct {
+type HostAssetHint struct {
 	Type      string   `json:"type"`
 	Name      string   `json:"name"`
 	IPv4      []string `json:"ipv4"`
@@ -18,4 +18,36 @@ type AssetHint struct {
 	Init      string   `json:"init"`
 	IsProxied bool     `json:"isproxied"`
 	Operator  string   `json:"operator"`
+}
+
+// a ComplianceItem measures the compliance of a target
+// with particular requirement. The item must be send to mozdef
+// in the details of a regular Event.
+type ComplianceItem struct {
+	Utctimestamp string           `json:"utctimestamp"`
+	Target       string           `json:"target"`
+	Policy       CompliancePolicy `json:"policy"`
+	Check        ComplianceCheck  `json:"check"`
+	Compliance   bool             `json:"compliance"`
+	Link         string           `json:"link"`
+	Tags         interface{}      `json:"tags"`
+}
+
+type CompliancePolicy struct {
+	Name  string `json:"name"`
+	URL   string `json:"url"`
+	Level string `json:"level"`
+}
+
+type ComplianceCheck struct {
+	Ref         string         `json:"ref"`
+	Description string         `json:"description"`
+	Name        string         `json:"name"`
+	Location    string         `json:"location"`
+	Test        ComplianceTest `json:"test"`
+}
+
+type ComplianceTest struct {
+	Type  string `json:"type"`
+	Value string `json:"value"`
 }
