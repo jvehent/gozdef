@@ -12,6 +12,7 @@ import (
 )
 
 func main() {
+    // initialize a publisher to mozdef's rabbitmq relay
     conf := gozdef.MqConf{
         Host:       "mozdef.rabbitmq.example.net",
         Port:       5671,
@@ -29,6 +30,7 @@ func main() {
         log.Fatal(err)
     }
 
+    // create a new event and set values in the fields
     ev, err := gozdef.NewEvent()
     if err != nil {
         log.Fatal(err)
@@ -38,6 +40,7 @@ func main() {
     ev.Summary = "tl;dr: everything's fine!"
     ev.Tags = append(ev.Tags, "gozdef")
 
+    // add details to the event, these fields are completely customizable
     ev.Details = struct {
         SrcIP   string `json:"sourceipaddress"`
         DestIP  string `json:"destinationipaddress"`
@@ -50,6 +53,10 @@ func main() {
         Blocked: true,
     }
 
+    // set the event severity to INFO
+    ev.Info()
+
+    // publish to mozdef
     err = publisher.Send(ev)
     if err != nil {
         log.Fatal(err)
