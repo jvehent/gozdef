@@ -34,6 +34,10 @@ type Publisher struct {
 }
 
 func (p Publisher) Send(e Event) error {
+	err := e.Validate()
+	if err != nil {
+		return err
+	}
 	data, err := json.Marshal(e)
 	if err != nil {
 		return err
