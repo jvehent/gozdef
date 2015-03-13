@@ -104,23 +104,30 @@ func InitAmqp(conf MqConf) (p Publisher, err error) {
 	dialConfig.Dial = func(network, addr string) (net.Conn, error) {
 		return net.DialTimeout(network, addr, timeout)
 	}
-	if conf.UseTLS && conf.ClientCertPath != "" && conf.ClientKeyPath != "" {
-		// import the client certificates
-		cert, err := tls.LoadX509KeyPair(conf.ClientCertPath, conf.ClientKeyPath)
+	if conf.UseTLS {
+		// import the ca cert
+		data, err := ioutil.ReadFile(conf.CACertPath)
 		if err != nil {
 			panic(err)
 		}
-		// import the ca cert
-		data, err := ioutil.ReadFile(conf.CACertPath)
 		ca := x509.NewCertPool()
 		if ok := ca.AppendCertsFromPEM(data); !ok {
 			panic("failed to import CA Certificate")
 		}
-		TLSconfig := tls.Config{Certificates: []tls.Certificate{cert},
+		TLSconfig := tls.Config{
 			RootCAs:            ca,
 			InsecureSkipVerify: false,
-			Rand:               rand.Reader}
+			Rand:               rand.Reader,
+		}
 		dialConfig.TLSClientConfig = &TLSconfig
+		if conf.ClientCertPath != "" && conf.ClientKeyPath != "" {
+			// import the client certificates
+			cert, err := tls.LoadX509KeyPair(conf.ClientCertPath, conf.ClientKeyPath)
+			if err != nil {
+				panic(err)
+			}
+			TLSconfig.Certificates = []tls.Certificate{cert}
+		}
 	}
 	// Setup the AMQP broker connection
 	amqpConn, err := amqp.DialConfig(dialaddr, dialConfig)
