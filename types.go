@@ -18,6 +18,7 @@ type HostAssetHint struct {
 	Init      string   `json:"init"`
 	IsProxied bool     `json:"isproxied"`
 	Operator  string   `json:"operator"`
+	Team      string   `json:"team"`
 }
 
 // a ComplianceItem measures the compliance of a target
