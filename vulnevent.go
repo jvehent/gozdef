@@ -7,8 +7,6 @@ package gozdef
 
 import (
 	"fmt"
-	"os"
-	"regexp"
 	"time"
 )
 
@@ -57,12 +55,21 @@ type VulnCVSS struct {
 	Authentication        string `json:"authentication"`
 }
 
-func NewEvent() (e VulnEvent, err error) {
+func NewVulnEvent() (e VulnEvent, err error) {
 	e.UTCTimestamp = time.Now().UTC()
 	return
 }
 
 // Validate verifies that an event is formatted correctly
 func (e VulnEvent) Validate() error {
+	if e.SourceName == "" {
+		return fmt.Errorf("must set SourceName in event")
+	}
+	if e.Asset.AssetID == 0 {
+		return fmt.Errorf("must set AssetID in event")
+	}
+	if e.Vuln.VulnID == "" {
+		return fmt.Errorf("must set VulnID in event")
+	}
 	return nil
 }
