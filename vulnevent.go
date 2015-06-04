@@ -43,6 +43,7 @@ type VulnVuln struct {
 	PatchIn       float64  `json:"patch_in"`
 	VulnID        string   `json:"vulnid"`
 	CVE           []string `json:"cves"`
+	CVEText       []string `json:"cvetext"`
 	CVSS          float64  `json:"cvss"`
 	CVSSVector    VulnCVSS `json:"cvss_vector"`
 }
