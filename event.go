@@ -12,6 +12,8 @@ import (
 	"time"
 )
 
+// Generic MozDef event handling
+
 // an Event represent a piece of information being passed to MozDef
 type Event struct {
 	Timestamp   time.Time   `json:"timestamp"`   // Full date plus time timestamp of the event in ISO format including the timezone offset

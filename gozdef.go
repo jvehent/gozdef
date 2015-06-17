@@ -11,6 +11,7 @@
 package gozdef
 
 import (
+	"bytes"
 	"crypto/rand"
 	"crypto/tls"
 	"crypto/x509"
@@ -33,7 +34,7 @@ type Publisher struct {
 	apiconf   ApiConf       // api configuration the publisher was initialized with
 }
 
-func (p Publisher) Send(e Event) error {
+func (p Publisher) Send(e ExternalEvent) error {
 	err := e.Validate()
 	if err != nil {
 		return err
@@ -50,8 +51,15 @@ func (p Publisher) Send(e Event) error {
 			Body:         data,
 		}
 		return p.amqpChan.Publish(p.mqconf.Exchange, p.mqconf.RoutingKey, false, false, msg)
+	} else {
+		b := bytes.NewBufferString(string(data))
+		resp, err := p.apiClient.Post(p.apiconf.Url, "application/json", b)
+		if err != nil {
+			return err
+		}
+		resp.Body.Close()
 	}
-	return fmt.Errorf("HTTP publisher not implement. we accept pull requests :)")
+	return nil
 }
 
 // MqConf holds the configuration parameters to connect to a rabbitmq instance
@@ -152,7 +160,11 @@ type ApiConf struct {
 }
 
 func InitApi(conf ApiConf) (p Publisher, err error) {
+	if conf.Url == "" {
+		return p, fmt.Errorf("must set Url value in ApiConf")
+	}
+	p.apiClient = &http.Client{}
 	p.use_amqp = false
 	p.apiconf = conf
-	return p, fmt.Errorf("not supported yet. we do accept pull requests ;)")
+	return p, nil
 }

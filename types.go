@@ -5,6 +5,10 @@
 // Contributor: Julien Vehent jvehent@mozilla.com [:ulfr]
 package gozdef
 
+type ExternalEvent interface {
+	Validate() error
+}
+
 // An HostAssetHint describes information about a host that can be used
 // to correlate asset information in MozDef. This is primarily used by MIG
 type HostAssetHint struct {
