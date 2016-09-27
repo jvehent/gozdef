@@ -31,21 +31,22 @@ type VulnAsset struct {
 }
 
 type VulnVuln struct {
-	Status        string   `json:"status"`
-	Title         string   `json:"title"`
-	Description   string   `json:"description"`
-	Proof         string   `json:"proof"`
-	ImpactLabel   string   `json:"impact_label"`
-	KnownExp      bool     `json:"known_exploits"`
-	KnownMal      bool     `json:"known_malware"`
-	Age           float64  `json:"age_days"`
-	DiscoveryTime int      `json:"discovery_time"`
-	PatchIn       float64  `json:"patch_in"`
-	VulnID        string   `json:"vulnid"`
-	CVE           []string `json:"cves"`
-	CVEText       []string `json:"cvetext"`
-	CVSS          float64  `json:"cvss"`
-	CVSSVector    VulnCVSS `json:"cvss_vector"`
+	Status              string   `json:"status"`
+	Title               string   `json:"title"`
+	Description         string   `json:"description"`
+	Proof               string   `json:"proof"`
+	ImpactLabel         string   `json:"impact_label"`
+	KnownExp            bool     `json:"known_exploits"`
+	KnownMal            bool     `json:"known_malware"`
+	LikelihoodIndicator string   `json:"likelihood_indicator"`
+	Age                 float64  `json:"age_days"`
+	DiscoveryTime       int      `json:"discovery_time"`
+	PatchIn             float64  `json:"patch_in"`
+	VulnID              string   `json:"vulnid"`
+	CVE                 []string `json:"cves"`
+	CVEText             []string `json:"cvetext"`
+	CVSS                float64  `json:"cvss"`
+	CVSSVector          VulnCVSS `json:"cvss_vector"`
 }
 
 type VulnCVSS struct {
