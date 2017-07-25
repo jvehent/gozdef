@@ -8,6 +8,9 @@
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
 //
 // Contributor: Julien Vehent jvehent@mozilla.com [:ulfr]
+
+// Package gozdef provides an interface for submitting events to MozDef in a
+// standardized format.
 package gozdef
 
 import (
