@@ -16,11 +16,11 @@ type ExternalEvent interface {
 // with particular requirement. The item must be send to mozdef
 // in the details of a regular Event.
 type ComplianceItem struct {
-	Utctimestamp string      `json:"utctimestamp"`
-	Target       string      `json:"target"`
-	Compliance   bool        `json:"compliance"`
-	Link         string      `json:"link"`
-	Tags         interface{} `json:"tags"`
+	Utctimestamp string            `json:"utctimestamp"`
+	Target       string            `json:"target"`
+	Compliance   bool              `json:"compliance"`
+	Link         string            `json:"link"`
+	Tags         map[string]string `json:"tags"`
 
 	Policy struct {
 		Name  string `json:"name"`
