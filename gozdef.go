@@ -24,6 +24,7 @@ import (
 	"io/ioutil"
 	"net"
 	"net/http"
+	"net/url"
 	"time"
 )
 
@@ -162,7 +163,8 @@ func InitAmqp(conf MqConf) (p Publisher, err error) {
 
 // APIConf holds the configuration parameters to publish events to the REST API
 type APIConf struct {
-	URL string // a fully qualified URL where events are posted
+	URL      string // a fully qualified URL where events are posted
+	UseProxy bool
 }
 
 // InitAPI initializes a new Publisher that can be used to submit events to the
@@ -171,7 +173,17 @@ func InitAPI(conf APIConf) (p Publisher, err error) {
 	if conf.URL == "" {
 		return p, fmt.Errorf("must set URL value in APIConf")
 	}
-	p.apiClient = &http.Client{}
+	if conf.UseProxy {
+		p.apiClient = &http.Client{}
+	} else {
+		p.apiClient = &http.Client{
+			Transport: &http.Transport{
+				Proxy: func(_ *http.Request) (*url.URL, error) {
+					return nil, nil
+				},
+			},
+		}
+	}
 	p.useAmqp = false
 	p.apiconf = conf
 	return p, nil
